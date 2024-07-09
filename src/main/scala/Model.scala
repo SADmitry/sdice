@@ -11,7 +11,7 @@ class D(val sides: Int, val label: Option[String] = None):
     def roll(using randomizer: DiceRandom): Res[D] =
         Res(randomizer.random(1, sides), this)
 
-    def possible(): List[Res[D]] =
+    def possibleOutcomes(): List[Res[D]] =
         (1 to sides).map {i => Res(i, this)}.toList
 
     override def toString(): String =
