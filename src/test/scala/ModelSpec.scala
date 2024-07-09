@@ -6,7 +6,7 @@ class ModelSpec extends munit.FunSuite {
 
     val d6 = D(6)
     val obtained = d6.roll(using constantRandom)
-    val expected = Res(d6, 4)
+    val expected = Res(4, d6)
     assertEquals(obtained, expected)
   }
 }

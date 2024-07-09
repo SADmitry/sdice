@@ -7,14 +7,32 @@ given systemRandom: DiceRandom with
         start + rnd.nextInt( (end - start) + 1 )
 
 
-trait Dice:
-    def roll(using randomizer: DiceRandom): Result
+class D(val sides: Int, val label: Option[String] = None):
+    def roll(using randomizer: DiceRandom): Res[D] =
+        Res(randomizer.random(1, sides), this)
 
-case class D(val sides: Int, val label: Option[String] = None) extends Dice:
-    override def roll(using randomizer: DiceRandom): Result =
-        Res(this, randomizer.random(1, sides))
+    def possible(): List[Res[D]] =
+        (1 to sides).map {i => Res(i, this)}.toList
+
+    override def toString(): String =
+        label match
+            case None        => s"D($sides)"
+            case Some(value) => s"D($sides, $label)"
+
+    override def equals(that: Any): Boolean =
+        that match
+            case d: D =>
+                this.sides == d.sides && this.label == d.label
+            case _ =>
+                false
+        
 
 
-trait Result
-
-case class Res[+T <: Dice](val d: T, res: Int) extends Result
+class Res[+T <: D](val res: Int, val d: T):
+    override def toString(): String = s"Res($res, $d)"
+    override def equals(that: Any): Boolean =
+        that match
+            case r: Res[_] =>
+                this.d == r.d && this.res == r.res
+            case _ =>
+                false
