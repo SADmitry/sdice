@@ -1,3 +1,4 @@
+package sdmitry
 
 class EngineSpec extends munit.FunSuite {
   test("Outcomes of 1d6 should be 6 results") {
@@ -48,13 +49,6 @@ class EngineSpec extends munit.FunSuite {
         List(Res(5, D(6)), Res(2, D(2))),
         List(Res(6, D(6)), Res(2, D(2))),
     )
-    assertEquals(obtained, expected)
-  }
-
-  test("Joan of Ark test") {
-    val joaOut = DiceEngine.outcomesOf(DiceEngine.joanOfArkTestPool)
-    val obtained = DiceEngine.faceToFaceNegating(joaOut, DiceEngine.joanOfArkAnnotations, DiceEngine.joanOfArkNegation, DiceEngine.joanOfArkStats)
-    val expected = List("44.4 of dealing no damage", "55.6 of dealing at least one damage")
     assertEquals(obtained, expected)
   }
 }

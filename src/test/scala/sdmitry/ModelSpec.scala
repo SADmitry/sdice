@@ -1,3 +1,4 @@
+package sdmitry
 
 class ModelSpec extends munit.FunSuite {
   test("Roll should return proper result") {

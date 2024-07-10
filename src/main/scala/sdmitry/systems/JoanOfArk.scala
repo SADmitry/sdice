@@ -1,20 +1,10 @@
-object DiceEngine:
-    def outcomesOf(pool: List[D]): List[List[Res[D]]] =
-        pool.map {d => d.possibleOutcomes()}
-            .foldRight(List(List.empty[Res[D]])) { (currentList, acc) =>
-                currentList.flatMap(elem => acc.map(o => o ++ List(elem)))
-            }
+package sdmitry.systems
 
-    def faceToFaceNegating(
-        outcomes: List[List[Res[D]]],
-        annotations: Map[String, Map[Int, String]],
-        negatingRule: (List[Res[D]]) => List[Res[D]],
-        statsCollect: (List[List[Res[D]]]) => List[String]
-    ): List[String] =
-        statsCollect(
-            outcomes.map ( (outcome: List[Res[D]]) => negatingRule(outcome) )
-        )
+import sdmitry.systems.GamingSystem
+import sdmitry.Res
+import sdmitry.D
 
+object JoanOfArk extends GamingSystem:
     def joanOfArkNegation(outcome: List[Res[D]]): List[Res[D]] =
         val pushesFirst = outcome.filter(res => res.d.playerId == Some(1)).filter(res => 
             res.d.label match

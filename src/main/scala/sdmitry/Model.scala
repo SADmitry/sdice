@@ -1,3 +1,5 @@
+package sdmitry
+
 trait DiceRandom:
     def random(low: Int, high: Int): Int
 
