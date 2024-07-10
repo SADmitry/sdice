@@ -7,7 +7,7 @@ given systemRandom: DiceRandom with
         start + rnd.nextInt( (end - start) + 1 )
 
 
-class D(val sides: Int, val label: Option[String] = None):
+class D(val sides: Int, val label: Option[String] = None, val playerId: Option[Int] = None):
     def roll(using randomizer: DiceRandom): Res[D] =
         Res(randomizer.random(1, sides), this)
 
@@ -15,20 +15,31 @@ class D(val sides: Int, val label: Option[String] = None):
         (1 to sides).map {i => Res(i, this)}.toList
 
     override def toString(): String =
-        label match
-            case None        => s"D($sides)"
-            case Some(value) => s"D($sides, $label)"
+        val optionals = Set(label, playerId).filter(_ != None).mkString(", ")
+        if (optionals.isBlank())
+            s"D($sides)"
+        else
+            s"D($sides, $optionals)"
 
     override def equals(that: Any): Boolean =
         that match
             case d: D =>
-                this.sides == d.sides && this.label == d.label
+                this.sides == d.sides && this.label == d.label && this.playerId == d.playerId
             case _ =>
                 false
         
 
 
 class Res[+T <: D](val res: Int, val d: T):
+    def explain(annotation: Map[String, Map[Int, String]]): String =
+        d.label match
+            case None        => ""
+            case Some(label) => annotation.get(label) match
+                    case None      => ""
+                    case Some(map) => map.get(res) match
+                        case Some(value) => value 
+                        case None        => ""
+
     override def toString(): String = s"Res($res, $d)"
     override def equals(that: Any): Boolean =
         that match

@@ -50,4 +50,11 @@ class EngineSpec extends munit.FunSuite {
     )
     assertEquals(obtained, expected)
   }
+
+  test("Joan of Ark test") {
+    val joaOut = DiceEngine.outcomesOf(DiceEngine.joanOfArkTestPool)
+    val obtained = DiceEngine.faceToFaceNegating(joaOut, DiceEngine.joanOfArkAnnotations, DiceEngine.joanOfArkNegation, DiceEngine.joanOfArkStats)
+    val expected = List("44.4 of dealing no damage", "55.6 of dealing at least one damage")
+    assertEquals(obtained, expected)
+  }
 }
