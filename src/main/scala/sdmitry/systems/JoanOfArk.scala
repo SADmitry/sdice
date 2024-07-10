@@ -4,8 +4,8 @@ import sdmitry.systems.GamingSystem
 import sdmitry.Res
 import sdmitry.D
 
-object JoanOfArk extends GamingSystem:
-    def joanOfArkNegation(outcome: List[Res[D]]): List[Res[D]] =
+object JoanOfArk extends GamingSystem, GamingSystemWithCustomDice, GamingSystemWithNegation:
+    override def negation(outcome: List[Res[D]]): List[Res[D]] =
         val pushesFirst = outcome.filter(res => res.d.playerId == Some(1)).filter(res => 
             res.d.label match
                 case Some(l) if l == "red" && res.res == 2                   => true
@@ -67,7 +67,7 @@ object JoanOfArk extends GamingSystem:
                             case p if p > 0 =>
                                 (1 to Math.abs(p)).map(_ => push).toList
 
-    def joanOfArkStats(outsomes: List[List[Res[D]]]): List[String] =
+    override def explain(outsomes: List[List[Res[D]]]): List[String] =
         val shield = Res(1, D(6, Some("black")))
 
         val noDamageAmount = outsomes.filter( out => out.isEmpty).size + outsomes.filter( out => out.forall( r => r == shield)).size
@@ -78,18 +78,9 @@ object JoanOfArk extends GamingSystem:
             s"${(BigDecimal(100) - noDamageChance).setScale(1, BigDecimal.RoundingMode.UP)} of dealing at least one damage"
         )
 
-    def joanOfArkAnnotations: Map[String, Map[Int, String]] = Map(
+    override def annotations(): Map[String, Map[Int, String]] = Map(
         "red" -> Map(1 -> "shield", 2 -> "push", 3 -> "disrupt", 4 -> "disrupt", 5 -> "sword", 6 -> "sword"),
         "black" -> Map(1 -> "shield", 2 -> "shield", 3 -> "shield", 4 -> "disrupt", 5 -> "disrupt", 6 -> "sword"),
         "yellow" -> Map(1 -> "shield", 2 -> "push", 3 -> "push", 4 -> "disrupt", 5 -> "", 6 -> ""),
         "white" -> Map(1 -> "shield", 2 -> "shield", 3 -> "push", 4 -> "disrupt", 5 -> "disrupt", 6 -> ""),
-    )
-
-    def joanOfArkTestPool: List[D] = List(
-        D(6, Some("red"), Some(1)),
-        D(6, Some("yellow"), Some(1)),
-        D(6, Some("yellow"), Some(1)),
-        D(6, Some("white"), Some(1)),
-        D(6, Some("black"), Some(2)),
-        D(6, Some("black"), Some(2))
     )
