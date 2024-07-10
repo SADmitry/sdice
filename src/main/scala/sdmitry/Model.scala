@@ -10,10 +10,10 @@ given systemRandom: DiceRandom with
 
 
 class D(val sides: Int, val label: Option[String] = None, val playerId: Option[Int] = None):
-    def roll(using randomizer: DiceRandom): Res[D] =
+    def roll(using randomizer: DiceRandom): Res =
         Res(randomizer.random(1, sides), this)
 
-    def possibleOutcomes(): List[Res[D]] =
+    def possibleOutcomes(): List[Res] =
         (1 to sides).map {i => Res(i, this)}.toList
 
     override def toString(): String =
@@ -32,7 +32,7 @@ class D(val sides: Int, val label: Option[String] = None, val playerId: Option[I
         
 
 
-class Res[+T <: D](val res: Int, val d: T):
+class Res(val res: Int, val d: D):
     def explain(annotation: Map[String, Map[Int, String]]): String =
         d.label match
             case None        => ""
@@ -45,7 +45,7 @@ class Res[+T <: D](val res: Int, val d: T):
     override def toString(): String = s"Res($res, $d)"
     override def equals(that: Any): Boolean =
         that match
-            case r: Res[_] =>
+            case r: Res =>
                 this.d == r.d && this.res == r.res
             case _ =>
                 false

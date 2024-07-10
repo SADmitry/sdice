@@ -12,12 +12,12 @@ class JoanOfArkSpec extends munit.FunSuite {
         val swordFirst = Res(5, D(6, Some("red"), Some(1)))
         val shieldSecond = Res(1, D(6, Some("black"), Some(2)))
 
-        val testOutcome: List[Res[D]] = List(
+        val testOutcome: List[Res] = List(
             disruptFirst, disruptSecond, swordFirst, swordFirst, shieldSecond
         )
 
         val obtained = JoanOfArk.negation(testOutcome)
-        val expected: List[Res[D]] = List(
+        val expected: List[Res] = List(
             swordFirst, disruptFirst
         )
 
@@ -37,8 +37,9 @@ class JoanOfArkSpec extends munit.FunSuite {
             D(6, Some("black"), Some(2))
         )
 
-        val joaOut = DiceEngine.outcomesOf(joanOfArkTestPool)
-        val obtained = DiceEngine.faceToFaceNegating(joaOut, JoanOfArk.annotations(), JoanOfArk.negation, JoanOfArk.explain)
+        val engine = DiceEngine(joanOfArkTestPool)
+        val joaOut = engine.outcomes()
+        val obtained = engine.faceToFaceNegating(JoanOfArk)
         val expected = List("44.4 of dealing no damage", "55.6 of dealing at least one damage")
         assertEquals(obtained, expected)
     }

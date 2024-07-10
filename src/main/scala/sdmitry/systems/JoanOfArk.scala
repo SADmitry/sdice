@@ -4,8 +4,8 @@ import sdmitry.systems.GamingSystem
 import sdmitry.Res
 import sdmitry.D
 
-object JoanOfArk extends GamingSystem, GamingSystemWithCustomDice, GamingSystemWithNegation:
-    override def negation(outcome: List[Res[D]]): List[Res[D]] =
+object JoanOfArk extends GamingSystemWithNegation:
+    override def negation(outcome: List[Res]): List[Res] =
         val pushesFirst = outcome.filter(res => res.d.playerId == Some(1)).filter(res => 
             res.d.label match
                 case Some(l) if l == "red" && res.res == 2                   => true
@@ -67,7 +67,7 @@ object JoanOfArk extends GamingSystem, GamingSystemWithCustomDice, GamingSystemW
                             case p if p > 0 =>
                                 (1 to Math.abs(p)).map(_ => push).toList
 
-    override def explain(outsomes: List[List[Res[D]]]): List[String] =
+    override def explain(outsomes: List[List[Res]]): List[String] =
         val shield = Res(1, D(6, Some("black")))
 
         val noDamageAmount = outsomes.filter( out => out.isEmpty).size + outsomes.filter( out => out.forall( r => r == shield)).size

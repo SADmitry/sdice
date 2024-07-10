@@ -3,7 +3,7 @@ package sdmitry
 class EngineSpec extends munit.FunSuite {
   test("Outcomes of 1d6 should be 6 results") {
     val pool = List(D(6))
-    val obtained = DiceEngine.outcomesOf(pool)
+    val obtained = DiceEngine(pool).outcomes()
     val expected = List(
         List(Res(1, D(6))), 
         List(Res(2, D(6))),
@@ -17,7 +17,7 @@ class EngineSpec extends munit.FunSuite {
 
   test("Outcomes of 2d3 should be 9 results") {
     val pool = List(D(3), D(3))
-    val obtained = DiceEngine.outcomesOf(pool)
+    val obtained = DiceEngine(pool).outcomes()
     val expected = List(
         List(Res(1, D(3)), Res(1, D(3))), 
         List(Res(2, D(3)), Res(1, D(3))),
@@ -34,7 +34,7 @@ class EngineSpec extends munit.FunSuite {
 
   test("Outcomes of 1d2 and 1d6 should be 12 results") {
     val pool = List(D(2), D(6))
-    val obtained = DiceEngine.outcomesOf(pool)
+    val obtained = DiceEngine(pool).outcomes()
     val expected = List(
         List(Res(1, D(6)), Res(1, D(2))), 
         List(Res(2, D(6)), Res(1, D(2))),
