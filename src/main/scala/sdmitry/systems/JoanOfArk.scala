@@ -5,6 +5,11 @@ import sdmitry.Res
 import sdmitry.D
 
 object JoanOfArk extends GamingSystemWithNegation:
+    val push = Res(3, D(6, Some("white")))
+    val disrupt = Res(4, D(6, Some("red")))
+    val sword = Res(5, D(6, Some("red")))
+    val shield = Res(1, D(6, Some("black")))
+
     override def negation(outcome: List[Res]): List[Res] =
         val pushesFirst = outcome.filter(res => res.d.playerId == Some(1)).filter(res => 
             res.d.label match
@@ -39,11 +44,6 @@ object JoanOfArk extends GamingSystemWithNegation:
                 case _                                                         => false  
         ).size
 
-        val push = Res(3, D(6, Some("white")))
-        val disrupt = Res(4, D(6, Some("red")))
-        val sword = Res(5, D(6, Some("red")))
-        val shield = Res(1, D(6, Some("black")))
-
         val afterSwords = shieldsSecond - swordsFirst
         afterSwords match
             case 0 => 
@@ -71,11 +71,22 @@ object JoanOfArk extends GamingSystemWithNegation:
         val shield = Res(1, D(6, Some("black")))
 
         val noDamageAmount = outsomes.filter( out => out.isEmpty).size + outsomes.filter( out => out.forall( r => r == shield)).size
-        val noDamageChance = BigDecimal(noDamageAmount) / outsomes.size * 100
+        val noDamageChance = BigDecimal(noDamageAmount) /  outsomes.size * 100
+
+        val pushAmount = outsomes.filter( out => out.contains(push)).size
+        val pushChance = BigDecimal(pushAmount) /  outsomes.size * 100
+
+        val disruptAmount = outsomes.filter( out => out.contains(disrupt)).size
+        val disruptChance = BigDecimal(disruptAmount) /  outsomes.size * 100
+
+        val swordAmount = outsomes.filter( out => out.contains(sword)).size
+        val swordChance = BigDecimal(swordAmount) /  outsomes.size * 100
 
         List(
-            s"${noDamageChance.setScale(1, BigDecimal.RoundingMode.DOWN)} of dealing no damage",
-            s"${(BigDecimal(100) - noDamageChance).setScale(1, BigDecimal.RoundingMode.UP)} of dealing at least one damage"
+            s"${noDamageChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of dealing no damage",
+            s"${pushChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of inflicting push",
+            s"${disruptChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of inflicting disrupt",
+            s"${swordChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of inflicting sword"
         )
 
     override def annotations(): Map[String, Map[Int, String]] = Map(
