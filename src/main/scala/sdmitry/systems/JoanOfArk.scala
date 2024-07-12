@@ -10,7 +10,7 @@ object JoanOfArk extends GamingSystemWithNegation:
     val sword = Res(5, D(6, Some("red")))
     val shield = Res(1, D(6, Some("black")))
 
-    override def negation(outcome: List[Res]): List[Res] =
+    override def negation(outcome: Iterable[Res]): Iterable[Res] =
         val pushesFirst = outcome.filter(res => res.d.playerId == Some(1)).filter(res => 
             res.d.label match
                 case Some(l) if l == "red" && res.res == 2                   => true
@@ -67,19 +67,19 @@ object JoanOfArk extends GamingSystemWithNegation:
                             case p if p > 0 =>
                                 (1 to Math.abs(p)).map(_ => push).toList
 
-    override def explain(outsomes: List[List[Res]]): List[String] =
+    override def explain(outsomes: Iterable[Iterable[Res]]): List[String] =
         val shield = Res(1, D(6, Some("black")))
 
         val noDamageAmount = outsomes.filter( out => out.isEmpty).size + outsomes.filter( out => out.forall( r => r == shield)).size
         val noDamageChance = BigDecimal(noDamageAmount) /  outsomes.size * 100
 
-        val pushAmount = outsomes.filter( out => out.contains(push)).size
+        val pushAmount = outsomes.filter( out => out.exists(r => r == push)).size
         val pushChance = BigDecimal(pushAmount) /  outsomes.size * 100
 
-        val disruptAmount = outsomes.filter( out => out.contains(disrupt)).size
+        val disruptAmount = outsomes.filter( out => out.exists(r => r == disrupt)).size
         val disruptChance = BigDecimal(disruptAmount) /  outsomes.size * 100
 
-        val swordAmount = outsomes.filter( out => out.contains(sword)).size
+        val swordAmount = outsomes.filter( out => out.exists(r => r == sword)).size
         val swordChance = BigDecimal(swordAmount) /  outsomes.size * 100
 
         List(

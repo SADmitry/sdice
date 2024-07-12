@@ -4,8 +4,7 @@ import sdmitry.DiceEngine
 import sdmitry.D
 import sdmitry.Res
 
-class JoanOfArkSpec extends munit.FunSuite {
-
+class JoanOfArkSpec extends munit.FunSuite:
     test("Joan of Ark negation check") {
         val disruptFirst = Res(4, D(6, Some("red"), Some(1)))
         val disruptSecond = Res(4, D(6, Some("red"), Some(2)))
@@ -38,7 +37,7 @@ class JoanOfArkSpec extends munit.FunSuite {
         )
 
         val engine = DiceEngine(joanOfArkTestPool)
-        val joaOut = engine.outcomes()
+        val joaOut = engine.withOutcomes()
         val obtained = engine.faceToFaceNegating(JoanOfArk)
         val expected = List(
             "44% of dealing no damage",
@@ -48,4 +47,3 @@ class JoanOfArkSpec extends munit.FunSuite {
         )
         assertEquals(obtained, expected)
     }
-}
