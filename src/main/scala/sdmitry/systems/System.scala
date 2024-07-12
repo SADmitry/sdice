@@ -8,7 +8,7 @@ trait GamingSystem:
       * @param outsomes possible outcomes simulated by the engine
       * @return explained statistics depending on a gaming system
       */
-    def explain(outsomes: List[List[Res]]): List[String]
+    def explain(outsomes: Iterable[Iterable[Res]]): List[String]
 
 trait GamingSystemWithCustomDice extends GamingSystem:
     /**
@@ -25,4 +25,4 @@ trait GamingSystemWithNegation extends GamingSystemWithCustomDice:
       * @param outcome is a list of modelled result which may possibly happen
       * @return updated list containing only dice that should be resolved
       */
-    def negation(outcome: List[Res]): List[Res]
+    def negation(outcome: Iterable[Res]): Iterable[Res]

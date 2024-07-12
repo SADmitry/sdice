@@ -1,6 +1,6 @@
 package sdmitry
 
-class ModelSpec extends munit.FunSuite {
+class ModelSpec extends munit.FunSuite:
   test("Roll should return proper result") {
     given constantRandom: DiceRandom with
         def random(start: Int, end: Int): Int = 4
@@ -10,4 +10,3 @@ class ModelSpec extends munit.FunSuite {
     val expected = Res(4, d6)
     assertEquals(obtained, expected)
   }
-}
