@@ -1,28 +1,21 @@
 package sdmitry.systems
 
-import sdmitry.D
+import sdmitry.Dice
 import sdmitry.Res
+import sdmitry.Dice
 
-trait GamingSystem:
+trait GamingSystem[R, D <: Dice[R]]:
     /**
       * @param outsomes possible outcomes simulated by the engine
       * @return explained statistics depending on a gaming system
       */
-    def explain(outsomes: Iterable[Iterable[Res]]): List[String]
+    def explain(outsomes: Iterable[Iterable[Res[R, D]]]): List[String]
 
-trait GamingSystemWithCustomDice extends GamingSystem:
-    /**
-      * @return a map of annotations for custom dice used in a game.
-      * Key of the first map is the name of the die.
-      * Second map is pairs of a face and its label
-      */
-    def annotations(): Map[String, Map[Int, String]]
-
-trait GamingSystemWithNegation extends GamingSystemWithCustomDice:
+trait GamingSystemWithNegation[R, D <: Dice[R]] extends GamingSystem[R, D]:
     /**
       * Rule is applied to one outcome and returns updated result eliminating
       * dice which should be negated following gaming mechanic
       * @param outcome is a list of modelled result which may possibly happen
       * @return updated list containing only dice that should be resolved
       */
-    def negation(outcome: Iterable[Res]): Iterable[Res]
+    def negation(outcome: Iterable[Res[R, D]]): Iterable[Res[R, D]]

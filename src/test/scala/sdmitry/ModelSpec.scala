@@ -5,8 +5,8 @@ class ModelSpec extends munit.FunSuite:
     given constantRandom: DiceRandom with
         def random(start: Int, end: Int): Int = 4
 
-    val d6 = D(6)
+    val d6 = new D6
     val obtained = d6.roll(using constantRandom)
-    val expected = Res(4, d6)
+    val expected = 4
     assertEquals(obtained, expected)
   }
