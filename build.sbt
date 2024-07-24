@@ -23,7 +23,7 @@ credentials += Credentials(
   "GitHub Package Registry",
   "maven.pkg.github.com",
   "SADmitry",
-  sys.env.get("TOKEN")
+  sys.env.getOrElse("TOKEN", "")
 )
 
 lazy val root = project
