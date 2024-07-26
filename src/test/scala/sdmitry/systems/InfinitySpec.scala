@@ -28,8 +28,7 @@ class InfinitySpec extends munit.FunSuite:
 
         val engine = DiceEngine(infinityTestPool)
         val outcomes = engine.outcomes()
-        val resolve = outcomes.resolveNegatingRange(Infinity, (r) => true, (r) => true)
-        val obtained = outcomes.explain(Infinity, resolve)
+        val obtained = outcomes.resolveNegatingRange(Infinity, (r) => true, (r) => true).explain(Infinity)
         val expected = List(
             "77% of 1st player win",
             "22% of 2nd player win"

@@ -33,8 +33,7 @@ class JoanOfArkSpec extends munit.FunSuite:
 
         val engine = DiceEngine(joanOfArkTestPool)
         val outcomes = engine.outcomes()
-        val resolve = outcomes.resolveNegating(JoanOfArk)
-        val obtained = outcomes.explain(JoanOfArk, resolve)
+        val obtained = outcomes.resolveNegating(JoanOfArk).explain(JoanOfArk)
         val expected = List(
             "44% of dealing no damage",
             "56% of inflicting push",
