@@ -30,7 +30,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "sdice",
-    version := "0.8.0",
+    version := "0.8.1",
 
     scalaVersion := scala3Version,
 
