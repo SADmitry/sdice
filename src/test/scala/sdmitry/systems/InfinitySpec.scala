@@ -5,20 +5,35 @@ import sdmitry.Dice
 import sdmitry.Res
 import sdmitry.DiceRandom
 
-class D20(override val playerId: Option[Int] = None) extends Dice[Int]:
-    override def roll(using randomizer: DiceRandom): Int = randomizer.random(1, 20)
-    override def possibleOutcomes(): Seq[Int] = (1 to 20)
-
 class InfinitySpec extends munit.FunSuite:
     test("Infinity negation check") {
-        val testOutcome: Iterable[Res[Int, Dice[Int]]] = Iterable(
+        val testOutcome = Iterable(
             Res(5, D20(Some(1))), Res(8, D20(Some(1))), Res(9, D20(Some(1))), Res(11, D20(Some(1))), Res(6, D20(Some(2))), Res(9, D20(Some(2)))
         )
 
         val obtained = Infinity.negation(testOutcome, (r) => true, (r) => true)
-        val expected: Iterable[Res[Int, D20]] = Iterable(
+        val expected = Iterable(
             Res(11, D20(Some(1)))
         )
 
+        assertEquals(obtained, expected)
+    }
+
+    test("Infinity system on test pool") {
+        val infinityTestPool = Seq(
+            D20(playerId = Some(1)),
+            D20(playerId = Some(1)),
+            D20(playerId = Some(1)),
+            D20(playerId = Some(2))
+        )
+
+        val engine = DiceEngine(infinityTestPool)
+        val outcomes = engine.outcomes()
+        val resolve = outcomes.resolveNegatingRange(Infinity, (r) => true, (r) => true)
+        val obtained = outcomes.explain(Infinity, resolve)
+        val expected = List(
+            "77% of 1st player win",
+            "22% of 2nd player win"
+        )
         assertEquals(obtained, expected)
     }
