@@ -50,13 +50,3 @@ class Outcomes[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
                 this.outcomes == o.outcomes
             case _ =>
                 false
-
-class Res[+R, +D <: Dice[R]](val res: R, val d: D):
-    override def toString(): String = s"Res($res)"
-
-    override def equals(that: Any): Boolean =
-        that match
-            case r: Res[_, _] =>
-                this.res == r.res
-            case _ =>
-                false

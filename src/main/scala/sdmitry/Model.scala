@@ -1,13 +1,7 @@
 package sdmitry
 
-trait DiceRandom:
-    def random(low: Int, high: Int): Int
 
-given systemRandom: DiceRandom with
-    def random(start: Int, end: Int): Int =
-        val rnd = new scala.util.Random
-        start + rnd.nextInt( (end - start) + 1 )
-
+case class Res[+R, +D <: Dice[R]](val res: R, val d: D)
 
 trait Dice[R]:
     def playerId: Int = 1
@@ -33,3 +27,12 @@ case class D10(override val playerId: Int = 1) extends Dice[Int]:
 case class D20(override val playerId: Int = 1) extends Dice[Int]:
     override def roll(using randomizer: DiceRandom): Int = randomizer.random(1, 20)
     override def possibleOutcomes(): Seq[Int] = (1 to 20)
+
+
+trait DiceRandom:
+    def random(low: Int, high: Int): Int
+
+given systemRandom: DiceRandom with
+    def random(start: Int, end: Int): Int =
+        val rnd = new scala.util.Random
+        start + rnd.nextInt( (end - start) + 1 )
