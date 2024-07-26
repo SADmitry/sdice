@@ -19,8 +19,8 @@ class JoanOfArkSpec extends munit.FunSuite:
             swordFirst, disruptFirst
         )
 
-        val obtainedAnnotated = obtained.map( r => r.explain()).mkString(", ")
-        val expectedAnnotated = expected.map( r => r.explain()).mkString(", ")
+        val obtainedAnnotated = obtained.mkString(", ")
+        val expectedAnnotated = expected.mkString(", ")
 
         assertEquals(obtainedAnnotated, expectedAnnotated)
     }
@@ -36,8 +36,9 @@ class JoanOfArkSpec extends munit.FunSuite:
         )
 
         val engine = DiceEngine(joanOfArkTestPool)
-        val joaOut = engine.outcomes()
-        val obtained = joaOut.faceToFaceNegating(JoanOfArk)
+        val outcomes = engine.outcomes()
+        val resolve = outcomes.resolveNegating(JoanOfArk)
+        val obtained = outcomes.explain(JoanOfArk, resolve)
         val expected = List(
             "44% of dealing no damage",
             "56% of inflicting push",

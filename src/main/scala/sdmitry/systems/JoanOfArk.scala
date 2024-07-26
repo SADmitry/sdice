@@ -1,6 +1,5 @@
 package sdmitry.systems
 
-import sdmitry.systems.GamingSystem
 import sdmitry.Res
 import sdmitry.Dice
 import sdmitry.DiceRandom

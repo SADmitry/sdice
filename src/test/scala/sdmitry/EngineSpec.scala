@@ -4,12 +4,10 @@ import scala.collection.mutable.ArrayBuffer
 
 class D3(override val playerId: Option[Int] = None) extends Dice[Int]:
     override def roll(using randomizer: DiceRandom): Int = randomizer.random(1, 3)
-
     override def possibleOutcomes(): Seq[Int] = (1 to 3)
 
 class D2(override val playerId: Option[Int] = None) extends Dice[Int]:
     override def roll(using randomizer: DiceRandom): Int = randomizer.random(1, 2)
-
     override def possibleOutcomes(): Seq[Int] = (1 to 2)
 
 class EngineSpec extends munit.FunSuite:

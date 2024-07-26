@@ -1,6 +1,8 @@
 package sdmitry
 
+import sdmitry.systems.GamingSystem
 import sdmitry.systems.GamingSystemWithNegation
+import sdmitry.systems.GamingSystemWithNegationInRange
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.Buffer
 
@@ -27,10 +29,20 @@ class DiceEngine[R, D <: Dice[R]](val pool: Iterable[D]):
 class Outcomes[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
     /**
     * Calculate statistics from given pool for given type of system
-    * @return List of gaming statistics
+    * @return resolved roll 
     */
-    def faceToFaceNegating[G <: GamingSystemWithNegation[R, D]](system: G): List[String] =
-        system.explain(outcomes.map ( outcome => system.negation(outcome) ))
+    def resolveNegating[G <: GamingSystemWithNegation[R, D]](system: G): Iterable[Iterable[Res[R, D]]] =
+        outcomes.map (outcome => system.negation(outcome))
+
+    def resolveNegatingRange[G <: GamingSystemWithNegationInRange[R, D]](
+        system: G,
+        firstRange: (Res[R, D]) => Boolean,
+        secondRange: (Res[R, D]) => Boolean
+    ): Iterable[Iterable[Res[R, D]]] =
+        outcomes.map (outcome => system.negation(outcome, firstRange, secondRange))
+
+    def explain[G <: GamingSystem[R, D]](system: G, resolved: Iterable[Iterable[Res[R, D]]]): List[String] =
+        system.explain(resolved)
 
     override def equals(that: Any): Boolean =
         that match
@@ -39,9 +51,7 @@ class Outcomes[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
             case _ =>
                 false
 
-class Res[R, D <: Dice[R]](val res: R, val d: D):
-    def explain(): String = res.toString()
-
+class Res[+R, +D <: Dice[R]](val res: R, val d: D):
     override def toString(): String = s"Res($res)"
 
     override def equals(that: Any): Boolean =
