@@ -16,22 +16,22 @@ trait JoADice extends Dice[JoAResult]:
             case 4 => JoAResult.Sword
             case 5 => JoAResult.Shield
 
-class DBlack(override val playerId: Option[Int] = Some(1)) extends JoADice:
+case class DBlack(override val playerId: Int = 1) extends JoADice:
     override def possibleOutcomes(): Seq[JoAResult] = Seq(
         JoAResult.Shield, JoAResult.Shield, JoAResult.Shield, JoAResult.Disrupt, JoAResult.Disrupt, JoAResult.Sword,
     )
 
-class DRed(override val playerId: Option[Int] = Some(1)) extends JoADice:
+case class DRed(override val playerId: Int = 1) extends JoADice:
     override def possibleOutcomes(): Seq[JoAResult] = Seq(
         JoAResult.Shield, JoAResult.Push, JoAResult.Disrupt, JoAResult.Disrupt, JoAResult.Sword, JoAResult.Sword
     )
 
-class DYellow(override val playerId: Option[Int] = Some(1)) extends JoADice:
+case class DYellow(override val playerId: Int = 1) extends JoADice:
     override def possibleOutcomes(): Seq[JoAResult] = Seq(
         JoAResult.Shield, JoAResult.Push, JoAResult.Push, JoAResult.Disrupt, JoAResult.Blank, JoAResult.Blank
     )
 
-class DWhite(override val playerId: Option[Int] = Some(1)) extends JoADice:
+case class DWhite(override val playerId: Int = 1) extends JoADice:
     override def possibleOutcomes(): Seq[JoAResult] = Seq(
         JoAResult.Shield, JoAResult.Shield, JoAResult.Push, JoAResult.Disrupt, JoAResult.Disrupt, JoAResult.Blank,
     )
@@ -39,8 +39,8 @@ class DWhite(override val playerId: Option[Int] = Some(1)) extends JoADice:
 
 object JoanOfArk extends GamingSystemWithNegation[JoAResult, JoADice]:
     override def negation(outcome: Iterable[Res[JoAResult, JoADice]]): Iterable[Res[JoAResult, JoADice]] =
-        val firstPool = outcome.filter(_.d.playerId == Some(1))
-        val secondPool = outcome.filter(_.d.playerId == Some(2))
+        val firstPool = outcome.filter(_.d.playerId == 1)
+        val secondPool = outcome.filter(_.d.playerId == 2)
 
         val pushesOfFirst = firstPool.filter(_.res == JoAResult.Push).size
         val disruptsOfFirst = firstPool.filter(_.res == JoAResult.Disrupt).size

@@ -5,10 +5,10 @@ import sdmitry.Res
 
 class JoanOfArkSpec extends munit.FunSuite:
     test("Joan of Ark negation check") {
-        val disruptFirst = Res[JoAResult, JoADice](JoAResult.Disrupt, DBlack(playerId = Some(1)))
-        val disruptSecond = Res[JoAResult, JoADice](JoAResult.Disrupt, DBlack(playerId = Some(2)))
-        val swordFirst = Res[JoAResult, JoADice](JoAResult.Sword, DBlack(playerId = Some(1)))
-        val shieldSecond = Res[JoAResult, JoADice](JoAResult.Shield, DBlack(playerId = Some(2)))
+        val disruptFirst = Res(JoAResult.Disrupt, DBlack(1))
+        val disruptSecond = Res(JoAResult.Disrupt, DBlack(2))
+        val swordFirst = Res(JoAResult.Sword, DBlack(1))
+        val shieldSecond = Res(JoAResult.Shield, DBlack(2))
 
         val testOutcome = Seq(
             disruptFirst, disruptSecond, swordFirst, swordFirst, shieldSecond
@@ -27,18 +27,13 @@ class JoanOfArkSpec extends munit.FunSuite:
 
     test("Joan of Ark system on test pool") {
         val joanOfArkTestPool = Seq(
-            DRed(playerId = Some(1)),
-            DYellow(playerId = Some(1)),
-            DYellow(playerId = Some(1)),
-            DWhite(playerId = Some(1)),
-            DBlack(playerId = Some(2)),
-            DBlack(playerId = Some(2))
+            DRed(1), DYellow(1), DYellow(1), DWhite(1),
+            DBlack(2), DBlack(2)
         )
 
         val engine = DiceEngine(joanOfArkTestPool)
         val outcomes = engine.outcomes()
-        val resolve = outcomes.resolveNegating(JoanOfArk)
-        val obtained = outcomes.explain(JoanOfArk, resolve)
+        val obtained = outcomes.resolveNegating(JoanOfArk).explain(JoanOfArk)
         val expected = List(
             "44% of dealing no damage",
             "56% of inflicting push",

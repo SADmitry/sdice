@@ -26,37 +26,23 @@ class DiceEngine[R, D <: Dice[R]](val pool: Iterable[D]):
         )
         Outcomes(combinations)
 
-class Outcomes[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
+case class Outcomes[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
     /**
     * Calculate statistics from given pool for given type of system
     * @return resolved roll 
     */
-    def resolveNegating[G <: GamingSystemWithNegation[R, D]](system: G): Iterable[Iterable[Res[R, D]]] =
-        outcomes.map (outcome => system.negation(outcome))
+    def resolveNegating[G <: GamingSystemWithNegation[R, D]](system: G): Resolved[R, D] =
+        val negated = outcomes.map (outcome => system.negation(outcome))
+        Resolved(negated)
 
     def resolveNegatingRange[G <: GamingSystemWithNegationInRange[R, D]](
         system: G,
         firstRange: (Res[R, D]) => Boolean,
         secondRange: (Res[R, D]) => Boolean
-    ): Iterable[Iterable[Res[R, D]]] =
-        outcomes.map (outcome => system.negation(outcome, firstRange, secondRange))
+    ): Resolved[R, D] =
+        val negated = outcomes.map (outcome => system.negation(outcome, firstRange, secondRange))
+        Resolved(negated)
 
-    def explain[G <: GamingSystem[R, D]](system: G, resolved: Iterable[Iterable[Res[R, D]]]): List[String] =
-        system.explain(resolved)
-
-    override def equals(that: Any): Boolean =
-        that match
-            case o: Outcomes[_, _] =>
-                this.outcomes == o.outcomes
-            case _ =>
-                false
-
-class Res[+R, +D <: Dice[R]](val res: R, val d: D):
-    override def toString(): String = s"Res($res)"
-
-    override def equals(that: Any): Boolean =
-        that match
-            case r: Res[_, _] =>
-                this.res == r.res
-            case _ =>
-                false
+case class Resolved[R, D <: Dice[R]](val outcomes: Iterable[Iterable[Res[R, D]]]):
+    def explain[G <: GamingSystem[R, D]](system: G): List[String] =
+        system.explain(outcomes)
