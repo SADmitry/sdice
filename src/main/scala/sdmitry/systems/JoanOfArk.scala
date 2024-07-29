@@ -75,20 +75,27 @@ object JoanOfArk extends GamingSystemWithNegation[JoAResult, JoADice]:
                             case p if p > 0 =>
                                 (1 to Math.abs(p)).map(_ => push)
 
-    override def explain(outsomes: Iterable[Iterable[Res[JoAResult, JoADice]]]): List[String] =
-        val noDamageAmount = outsomes.filter(out => out.isEmpty).size + outsomes.filter(out => out.forall(r => r.res == JoAResult.Shield)).size
-        val noDamageChance = BigDecimal(noDamageAmount) /  outsomes.size * 100
+    override def classify(roll: Iterable[Res[JoAResult, JoADice]]): Seq[String] =
+        var result = Seq[String]()
+        if (roll.isEmpty || roll.forall(r => r.res == JoAResult.Shield))
+            result = result :+ "fail"
+        if (roll.exists(r => r.res == JoAResult.Push))
+            result = result :+ "push"
+        if (roll.exists(r => r.res == JoAResult.Disrupt))
+            result = result :+ "disrupt"
+        if (roll.exists(r => r.res == JoAResult.Sword))
+            result = result :+ "sword"
+        result
 
-        val pushAmount = outsomes.filter( out => out.exists(r => r.res == JoAResult.Push)).size
-        val pushChance = BigDecimal(pushAmount) /  outsomes.size * 100
+    override def explain(stats: Map[String, Long]): Seq[String] =
+        val total = stats.values.sum
 
-        val disruptAmount = outsomes.filter( out => out.exists(r => r.res == JoAResult.Disrupt)).size
-        val disruptChance = BigDecimal(disruptAmount) /  outsomes.size * 100
+        val noDamageChance = BigDecimal(stats("fail")) / total * 100
+        val pushChance = BigDecimal(stats("push")) / total * 100
+        val disruptChance = BigDecimal(stats("disrupt")) / total * 100
+        val swordChance = BigDecimal(stats("sword")) / total * 100
 
-        val swordAmount = outsomes.filter( out => out.exists(r => r.res == JoAResult.Sword)).size
-        val swordChance = BigDecimal(swordAmount) /  outsomes.size * 100
-
-        List(
+        Seq(
             s"${noDamageChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of dealing no damage",
             s"${pushChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of inflicting push",
             s"${disruptChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of inflicting disrupt",

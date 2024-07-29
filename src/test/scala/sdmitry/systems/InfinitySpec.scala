@@ -12,7 +12,8 @@ class InfinitySpec extends munit.FunSuite:
             Res(5, D20(1)), Res(8, D20(1)), Res(9, D20(1)), Res(11, D20(1)), Res(6, D20(2)), Res(9, D20(2))
         )
 
-        val obtained = Infinity.negation(testOutcome, (r) => true, (r) => true)
+        val infinity = new Infinity((r) => true, (r) => true)
+        val obtained = infinity.negation(testOutcome)
         val expected = Iterable(
             Res(11, D20(1))
         )
@@ -26,9 +27,9 @@ class InfinitySpec extends munit.FunSuite:
             D20(2)
         )
 
+        val infinity = new Infinity((r) => true, (r) => true)
         val engine = DiceEngine(infinityTestPool)
-        val outcomes = engine.outcomes()
-        val obtained = outcomes.resolveNegatingRange(Infinity, (r) => true, (r) => true).explain(Infinity)
+        val obtained = engine.statisticsNegatingRange(infinity)
         val expected = List(
             "77% of 1st player win",
             "22% of 2nd player win"

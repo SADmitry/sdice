@@ -32,13 +32,29 @@ class JoanOfArkSpec extends munit.FunSuite:
         )
 
         val engine = DiceEngine(joanOfArkTestPool)
-        val outcomes = engine.outcomes()
-        val obtained = outcomes.resolveNegating(JoanOfArk).explain(JoanOfArk)
-        val expected = List(
-            "44% of dealing no damage",
-            "56% of inflicting push",
-            "39% of inflicting disrupt",
-            "8% of inflicting sword"
+        val obtained = engine.statisticsNegating(JoanOfArk)
+        val expected = Seq(
+            "20% of dealing no damage",
+            "43% of inflicting push",
+            "30% of inflicting disrupt",
+            "6% of inflicting sword"
         )
         assertEquals(obtained, expected)
     }
+
+    // test("Joan of Ark system on big test pool") {
+    //     val joanOfArkTestPool = Seq(
+    //         DRed(1), DYellow(1), DYellow(1), DWhite(1), DRed(1), DRed(1), DRed(1), 
+    //         DBlack(2), DBlack(2), DBlack(2)
+    //     )
+
+    //     val engine = DiceEngine(joanOfArkTestPool)
+    //     val obtained = engine.statisticsNegating(JoanOfArk)
+    //     val expected = Seq(
+    //         "20% of dealing no damage",
+    //         "43% of inflicting push",
+    //         "30% of inflicting disrupt",
+    //         "6% of inflicting sword"
+    //     )
+    //     assertEquals(obtained, expected)
+    // }

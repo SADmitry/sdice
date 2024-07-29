@@ -3,7 +3,7 @@ package sdmitry
 
 case class Res[+R, +D <: Dice[R]](val res: R, val d: D)
 
-trait Dice[R]:
+trait Dice[+R]:
     def playerId: Int = 1
     def roll(using randomizer: DiceRandom): R
     def possibleOutcomes(): Seq[R]

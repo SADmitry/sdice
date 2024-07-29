@@ -5,12 +5,11 @@ import sdmitry.Dice
 import sdmitry.D20
 import sdmitry.DiceRandom
 
-object Infinity extends GamingSystemWithNegationInRange[Int, D20]:
-    override def negation(
-        outcome: Iterable[Res[Int, D20]],
-        firstRange: (Res[Int, D20]) => Boolean,
-        secondRange: (Res[Int, D20]) => Boolean
-    ): Iterable[Res[Int, D20]] =
+class Infinity(
+    override val firstRange: (Res[Int, D20]) => Boolean,
+    override val secondRange: (Res[Int, D20]) => Boolean
+) extends GamingSystemWithNegationInRange[Int, D20]:
+    override def negation(outcome: Iterable[Res[Int, D20]]): Iterable[Res[Int, D20]] =
         val firstPool = outcome.filter(_.d.playerId == 1).filter(firstRange)
         val secondPool = outcome.filter(_.d.playerId == 2).filter(secondRange)
         
@@ -19,11 +18,14 @@ object Infinity extends GamingSystemWithNegationInRange[Int, D20]:
 
         firstFiltered ++ secondFiltered
 
-    override def explain(outsomes: Iterable[Iterable[Res[Int, D20]]]): List[String] =
-        val firstWin = outsomes.filter(o => o.forall(os => os.d.playerId == 1))
-        val firstWinChance = BigDecimal(firstWin.size) / outsomes.size * 100
+    override def classify(roll: Iterable[Res[Int, D20]]): Seq[String] =
+        val firstWin = roll.forall(r => r.d.playerId == 1)
+        if (firstWin) Seq("success") else Seq("fail")
 
-        List(
+    override def explain(stats: Map[String, Long]): Seq[String] =
+        val total = stats.values.sum
+        val firstWinChance = BigDecimal(stats("success")) / total * 100
+        Seq(
             s"${firstWinChance.setScale(0, BigDecimal.RoundingMode.DOWN)}% of 1st player win",
             s"${(100 - firstWinChance).setScale(0, BigDecimal.RoundingMode.DOWN)}% of 2nd player win",
         )
