@@ -4,25 +4,21 @@ import sdmitry.DiceEngine
 import sdmitry.Res
 
 class JoanOfArkSpec extends munit.FunSuite:
-    test("Joan of Ark negation check") {
-        val disruptFirst = Res(JoAResult.Disrupt, DBlack(1))
-        val disruptSecond = Res(JoAResult.Disrupt, DBlack(2))
-        val swordFirst = Res(JoAResult.Sword, DBlack(1))
-        val shieldSecond = Res(JoAResult.Shield, DBlack(2))
-
-        val testOutcome = Seq(
-            disruptFirst, disruptSecond, swordFirst, swordFirst, shieldSecond
+    test("Joan of Ark system on small pool") {
+        val joanOfArkTestPool = Seq(
+            DRed(1), DBlack(2)
         )
 
-        val obtained = JoanOfArk.negation(testOutcome)
-        val expected: List[Res[JoAResult, JoADice]] = List(
-            swordFirst, disruptFirst
+        val engine = DiceEngine(joanOfArkTestPool)
+        val joa = new JoanOfArk
+        val obtained = engine.statisticsNegating(joa)
+        val expected = Seq(
+            "59% of dealing no damage",
+            "8% of inflicting push",
+            "16% of inflicting disrupt",
+            "16% of inflicting sword"
         )
-
-        val obtainedAnnotated = obtained.mkString(", ")
-        val expectedAnnotated = expected.mkString(", ")
-
-        assertEquals(obtainedAnnotated, expectedAnnotated)
+        assertEquals(obtained, expected)
     }
 
     test("Joan of Ark system on test pool") {
@@ -32,10 +28,11 @@ class JoanOfArkSpec extends munit.FunSuite:
         )
 
         val engine = DiceEngine(joanOfArkTestPool)
-        val obtained = engine.statisticsNegating(JoanOfArk)
+        val joa = new JoanOfArk
+        val obtained = engine.statisticsNegating(joa)
         val expected = Seq(
-            "20% of dealing no damage",
-            "43% of inflicting push",
+            "25% of dealing no damage",
+            "38% of inflicting push",
             "30% of inflicting disrupt",
             "6% of inflicting sword"
         )
