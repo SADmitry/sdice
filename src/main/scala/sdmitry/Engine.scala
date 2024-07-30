@@ -2,8 +2,6 @@ package sdmitry
 
 import sdmitry.systems.GamingSystem
 import sdmitry.systems.GamingSystemWithNegationInRange
-import scala.collection.mutable.ArrayBuffer
-import scala.collection.mutable.Buffer
 
 class DiceEngine[R, D <: Dice[R]](val pool: Seq[D]):
     import scala.collection.mutable.Map
