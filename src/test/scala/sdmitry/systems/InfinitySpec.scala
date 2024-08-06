@@ -54,7 +54,7 @@ class InfinitySpec extends munit.FunSuite:
 
         val infinity = new Infinity((r) => true, (r) => true)
         val engine = DiceEngine(infinityTestPool)
-        val obtained = engine.statisticsNegatingRange(infinity)
+        val obtained = engine.statisticsNegating(infinity)
         val expected = List(
             "47% of 1st player win",
             "53% of 2nd player win"
@@ -70,7 +70,7 @@ class InfinitySpec extends munit.FunSuite:
 
         val infinity = new Infinity((r) => true, (r) => true)
         val engine = DiceEngine(infinityTestPool)
-        val obtained = engine.statisticsNegatingRange(infinity)
+        val obtained = engine.statisticsNegating(infinity)
         val expected = List(
             "72% of 1st player win",
             "28% of 2nd player win"

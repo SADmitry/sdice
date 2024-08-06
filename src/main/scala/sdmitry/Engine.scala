@@ -11,11 +11,6 @@ class DiceEngine[R, D <: Dice[R]](val pool: Seq[D]):
         val tags = applySystemExplaining(outcomes, system)
         system.explain(tags.toMap)
 
-    def statisticsNegatingRange[G <: GamingSystemWithNegationInRange[R, D]](system: G): Seq[String] = 
-        val outcomes = pool.map(d => d.possibleOutcomes().map(o => Res[R, D](o, d)))
-        val tags = applySystemExplaining(outcomes, system)
-        system.explain(tags.toMap)
-
     private def applySystemExplaining[G <: GamingSystem[R, D]](
         lists: Seq[Seq[Res[R, D]]],
         system: G,
